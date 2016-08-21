@@ -1,0 +1,34 @@
+Name:           fluxetteback
+Version:        0.0
+Cabal-Version:  >= 1.2
+License:        BSD3
+Author:         Johannes Drever
+Synopsis:       Backend for fluxette
+Build-Type:     Simple
+
+Executable lantis
+  Build-Depends:  servant-server
+                , servant-blaze
+                , servant-jquery
+                , blaze-markup
+                , blaze-html
+                , generic-aeson
+                , warp
+                , wai
+                , aeson
+                , text
+                , base
+                , time
+                , either
+                , mtl
+                , parsec
+                , directory
+                , bytestring
+                , QuickCheck
+                , yaml
+                , transformers
+                , split
+
+  Main-Is:        main.hs
+  Hs-Source-Dirs: src
+
