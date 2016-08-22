@@ -4,6 +4,8 @@ import Servant
 import Network.Wai
 import Network.Wai.Handler.Warp
 
+import Model
+
 app :: Application
 app = serve (Proxy :: Proxy FluexetteAPI) server
 

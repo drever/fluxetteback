@@ -6,7 +6,7 @@ Author:         Johannes Drever
 Synopsis:       Backend for fluxette
 Build-Type:     Simple
 
-Executable lantis
+Executable server
   Build-Depends:  servant-server
                 , servant-blaze
                 , servant-jquery
@@ -28,7 +28,18 @@ Executable lantis
                 , yaml
                 , transformers
                 , split
+                , random-shuffle
+                , MonadRandom
+                , deepseq
 
   Main-Is:        main.hs
   Hs-Source-Dirs: src
+  other-modules:
+     Model
 
+Test-Suite test-all
+    main-is: Test.hs
+    Hs-Source-Dirs: src, Test
+    build-depends: base
+       , hspec
+    type: exitcode-stdio-1.0
