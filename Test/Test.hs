@@ -32,9 +32,25 @@ main = hspec $ do
     it "The inital game always contains a solution" $
       property $ \seed -> let g = evalRand initGame (mkStdGen seed)
                           in not . null $ solutions (gameDealt g)
-    it "Always shows games with solutions after removing three cards from the inital game" $
+    it "Shows games with solutions after removing three cards from the inital game" $
       property $ \seed -> let g = evalRand initGame (mkStdGen seed)
                           in let g' = removeCards (take 3 $ (gameDealt g)) g
                              in not . null $ solutions (gameDealt g')
+    -- it "Serves solutions until there are no more solutions" $
+    --   property $ \seed -> let (Game a d _) = evalRand (solveGame <$> initGame) (mkStdGen seed)
+    --                       in null $ solutions (a ++ d)
+  describe "removeCards" $ do
+    it "Keeps the number of cards constant" $
+      property $ \g@(Game a d c) -> let g'@(Game a' d' c') = removeCards (take 3 $ d) g
+                                    in (length $ a ++ d ++ c) == (length $ a' ++ d' ++ c')
+
+
+
+solveGame :: Game -> Game
+solveGame g@(Game a d c) = do
+  case solutions d of
+    [] -> g
+    (x1, x2, x3):xs -> solveGame $ removeCards [x1, x2, x3] g
+
 
 
