@@ -1,7 +1,4 @@
-{-# LANGUAGE TypeOperators, DataKinds, TypeFamilies #-}
 
-import Servant
-import Servant.HTML.Blaze
 
 import Network.Wai
 import Network.Wai.Handler.Warp
@@ -15,36 +12,13 @@ import Control.Monad
 
 import qualified Text.Blaze.Html5 as BH
 
+import Data.Proxy
+import Routes
+
+import Servant
+
 app :: MVar Game -> Application
-app v = serve (Proxy :: Proxy FluexetteAPI) (server v)
-
-server v = serveDirectory "../fluxette/js-build/install-root/bin/fluxette.jsexe"
-    :<|> serveDirectory "webroot/css"
-    :<|> serveDirectory "webroot/html"
-    :<|> currentGame v
-
-type FluexetteAPI = "js" :> Raw
-               :<|> "css" :> Raw
-               :<|> "html" :> Raw
-               :<|> "currentGame" :> Get '[JSON] Game
-
-newtype MyInt = MyInt Int
-
-instance BH.ToMarkup MyInt where
-  toMarkup (MyInt x) = BH.toHtml $ "The current value is: " ++ (show x)
-
-currentGame :: MVar Game -> EitherT ServantErr IO Game
-currentGame v = do
-  x <- liftIO $ readMVar v
-  return x
-
-counter :: MVar Int -> EitherT ServantErr IO MyInt
-counter v = do
-  -- e <- liftIO $ isEmptyMVar v
-  -- when e (liftIO $ putMVar v 38)
-  x <- liftIO $ takeMVar v
-  liftIO $ putMVar v (x + 1)
-  return (MyInt $ x + 1)
+app v = serve (Proxy :: Proxy FluxetteAPI) (server v)
 
 main :: IO ()
 main = do
