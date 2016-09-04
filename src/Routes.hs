@@ -19,8 +19,8 @@ type FluxetteAPI = "js" :> Raw
                :<|> NewGame
 
 type GetCurrentGame = "currentGame" :> Get '[JSON] Game
-type SetCurrentGame = "setCurrentGame" :> ReqBody '[JSON] Game :> Post '[JSON] Game
-type NewGame = "newGame" :> Post '[JSON] Game
+type SetCurrentGame = "setCurrentGame" :> ReqBody '[JSON] Game :> Put '[JSON] ()
+type NewGame = "newGame" :> Get '[JSON] Game
 
 server v = serveDirectory "../fluxette/js-build/install-root/bin/fluxette.jsexe"
     :<|> serveDirectory "webroot/css"
@@ -34,13 +34,13 @@ currentGame v = do
   x <- liftIO $ readMVar v
   return x
 
-setCurrentGame :: MVar Game -> Game -> EitherT ServantErr IO Game
+setCurrentGame :: MVar Game -> Game -> EitherT ServantErr IO ()
 setCurrentGame v g = do
   liftIO $ putStrLn "Set current game"
   liftIO $ putStrLn $ (show g)
   x <- liftIO $ takeMVar v
   liftIO $ putMVar v g
-  return g
+  return ()
 
 newGame :: MVar Game -> EitherT ServantErr IO Game
 newGame v = do
