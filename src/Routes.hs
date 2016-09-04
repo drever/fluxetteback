@@ -48,6 +48,7 @@ newGame v = do
     putStrLn "New game"
     x <- takeMVar v
     g <- initGame
+    putStrLn $ show g
     putMVar v g
     return g
 
